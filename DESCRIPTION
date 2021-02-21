@@ -1,0 +1,19 @@
+Package: hugostyle
+Type: Package
+Title: Default Style for Hugo Sites
+Version: 0.1.0
+Authors@R: 
+    c(person(given = "Colin",
+             family = "Gillespie",
+             role = c("aut", "cre"),
+             email = "csgillespie@gmail.com"))
+Maintainer: Colin Gillespie <csgillespie@gmail.com>
+Description: Provides a nice set of defaults when working with Hugo and Rmd files.
+    All of the hardwork is done by {rmarkdown}.
+License: GPL-3
+Imports:
+  rmarkdown,
+  knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
