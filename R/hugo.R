@@ -60,6 +60,26 @@ set_knitr_chunk_options = function(echo = TRUE,
                         ...)
 }
 
+add_base_url = function(lines) {
+  to_replace = stringr::str_detect(lines, pattern = "<img") &
+    stringr::str_detect(lines, pattern = "https?://", negate = TRUE)
+  lines[to_replace] = stringr::str_replace(string = lines[to_replace],
+                                           pattern = '<img.*src="(^")*',
+                                           replacement = '<img src="{{< url >}}\\1')
+
+  lines
+}
+
+check_alt = function(lines) {
+
+  lines = lines[stringr::str_detect(lines, pattern = "<img")]
+  missing_alt = stringr::str_detect(lines, pattern = "alt", negate = TRUE)
+  lines = lines[missing_alt]
+  for (line in lines) {
+    cli::cli_alert_warning("Missing alt: {line}")
+  }
+}
+
 #' MD file for hugo websites
 #'
 #' This format generates a standard markdown file.
@@ -70,13 +90,15 @@ set_knitr_chunk_options = function(echo = TRUE,
 #' `preserve_yaml` has been set to `TRUE` we need to keep the yaml in the md
 #' document for hugo.
 #'
-#' @param variant,preserve_yaml,toc,toc_depth,number_sections See `?rmarkdown::md_document`
+#' @param variant "commonmark" instead of "markdown_strict"
+#' @param preserve_yaml "TRUE" instead of "FALSE"
+#' @param toc,toc_depth,number_sections See `?rmarkdown::md_document`
 #' @param fig_width,fig_height,fig_retina,dev,df_print,includes See `?rmarkdown::md_document`
 #' @param includes,md_extensions,pandoc_args,ext See `?rmarkdown::md_document`
 #'
 #'
 #' @export
-hugo_md = function(variant = "markdown_strict", preserve_yaml = TRUE,
+hugo_md = function(variant = "commonmark", preserve_yaml = TRUE,
                    toc = FALSE, toc_depth = 3, number_sections = FALSE, fig_width = 7,
                    fig_height = 5, fig_retina = 2, dev = "png", df_print = "default",
                    includes = NULL, md_extensions = NULL, pandoc_args = NULL,
@@ -93,9 +115,8 @@ hugo_md = function(variant = "markdown_strict", preserve_yaml = TRUE,
       partitioned = rmarkdown:::partition_yaml_front_matter(input_lines)
       if (!is.null(partitioned$front_matter)) {
         output_lines = c(partitioned$front_matter, "", rmarkdown:::read_utf8(output_file))
-        output_lines = stringr::str_replace(string = output_lines,
-                                            pattern = '<img.*src="(^")*',
-                                            replacement = '<img src="{{< url >}}\\1')
+        output_lines = add_base_url(output_lines)
+        check_alt(output_lines)
         rmarkdown:::write_utf8(output_lines, output_file)
       }
       output_file

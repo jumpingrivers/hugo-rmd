@@ -5,7 +5,7 @@
 \title{MD file for hugo websites}
 \usage{
 hugo_md(
-  variant = "markdown_strict",
+  variant = "commonmark",
   preserve_yaml = TRUE,
   toc = FALSE,
   toc_depth = 3,
@@ -22,7 +22,11 @@ hugo_md(
 )
 }
 \arguments{
-\item{variant, preserve_yaml, toc, toc_depth, number_sections}{See `?rmarkdown::md_document`}
+\item{variant}{"commonmark" instead of "markdown_strict"}
+
+\item{preserve_yaml}{"TRUE" instead of "FALSE"}
+
+\item{toc, toc_depth, number_sections}{See `?rmarkdown::md_document`}
 
 \item{fig_width, fig_height, fig_retina, dev, df_print, includes}{See `?rmarkdown::md_document`}
 
