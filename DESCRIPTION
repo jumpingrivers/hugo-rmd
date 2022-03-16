@@ -1,7 +1,7 @@
 Package: hugostyle
 Type: Package
 Title: Default Style for Hugo Sites
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(person(given = "Colin",
              family = "Gillespie",

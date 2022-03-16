@@ -80,6 +80,18 @@ check_alt = function(lines) {
   }
 }
 
+replace_hugo_snippets = function(lines) {
+  to_replace = stringr::str_detect(lines, pattern = r"(\{\{\\<)")
+  lines[to_replace] = stringr::str_replace(string = lines[to_replace],
+                                           pattern = r"(\{\{\\<)",
+                                           replacement = r"(\{\{<)")
+  to_replace = stringr::str_detect(lines, pattern = r"(\\>\}\})")
+  lines[to_replace] = stringr::str_replace(string = lines[to_replace],
+                                           pattern = r"(\\>\}\})",
+                                           replacement = r"(>\}\})")
+  lines
+}
+
 #' MD file for hugo websites
 #'
 #' This format generates a standard markdown file.
@@ -115,6 +127,7 @@ hugo_md = function(variant = "commonmark", preserve_yaml = TRUE,
       partitioned = rmarkdown:::partition_yaml_front_matter(input_lines)
       if (!is.null(partitioned$front_matter)) {
         output_lines = c(partitioned$front_matter, "", rmarkdown:::read_utf8(output_file))
+        output_lines = replace_hugo_snippets(output_lines)
         output_lines = add_base_url(output_lines)
         check_alt(output_lines)
         rmarkdown:::write_utf8(output_lines, output_file)
@@ -122,15 +135,16 @@ hugo_md = function(variant = "commonmark", preserve_yaml = TRUE,
       output_file
     }
   }
-  rmarkdown::output_format(knitr = rmarkdown::knitr_options_html(fig_width, fig_height,
-                                                                 fig_retina, FALSE, dev),
-                           pandoc = rmarkdown::pandoc_options(to = variant,
-                                                              from = rmarkdown::from_rmarkdown(extensions = md_extensions),
-                                                              args = args,
-                                                              ext = ext,
-                                                              lua_filters = if (number_sections)
-                                                                rmarkdown::pkg_file_lua("number-sections.lua")),
-                           clean_supporting = FALSE,
-                           df_print = df_print, post_processor = post_processor)
+  rmarkdown::output_format(
+    knitr = rmarkdown::knitr_options_html(fig_width, fig_height,
+                                          fig_retina, FALSE, dev),
+    pandoc = rmarkdown::pandoc_options(to = variant,
+                                       from = rmarkdown::from_rmarkdown(extensions = md_extensions),
+                                       args = args,
+                                       ext = ext,
+                                       lua_filters = if (number_sections)
+                                         rmarkdown::pkg_file_lua("number-sections.lua")),
+    clean_supporting = FALSE,
+    df_print = df_print, post_processor = post_processor)
 
 }
