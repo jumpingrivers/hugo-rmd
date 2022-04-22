@@ -106,7 +106,7 @@ replace_hugo_snippets = function(lines) {
 #' @param preserve_yaml "TRUE" instead of "FALSE"
 #' @param toc,toc_depth,number_sections See `?rmarkdown::md_document`
 #' @param fig_width,fig_height,fig_retina,dev,df_print,includes See `?rmarkdown::md_document`
-#' @param includes,md_extensions,pandoc_args,ext See `?rmarkdown::md_document`
+#' @param md_extensions,pandoc_args,ext See `?rmarkdown::md_document`
 #'
 #'
 #' @export
@@ -123,14 +123,14 @@ hugo_md = function(variant = "commonmark", preserve_yaml = TRUE,
   args = c(args, pandoc_args)
   post_processor = if (preserve_yaml && variant != "markdown") {
     function(metadata, input_file, output_file, clean, verbose) {
-      input_lines = rmarkdown:::read_utf8(input_file)
-      partitioned = rmarkdown:::partition_yaml_front_matter(input_lines)
+      input_lines = read_utf8(input_file)
+      partitioned = partition_yaml_front_matter(input_lines)
       if (!is.null(partitioned$front_matter)) {
-        output_lines = c(partitioned$front_matter, "", rmarkdown:::read_utf8(output_file))
+        output_lines = c(partitioned$front_matter, "", read_utf8(output_file))
         output_lines = replace_hugo_snippets(output_lines)
         output_lines = add_base_url(output_lines)
         check_alt(output_lines)
-        rmarkdown:::write_utf8(output_lines, output_file)
+        write_utf8(output_lines, output_file)
       }
       output_file
     }
