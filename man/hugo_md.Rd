@@ -30,7 +30,7 @@ hugo_md(
 
 \item{fig_width, fig_height, fig_retina, dev, df_print, includes}{See `?rmarkdown::md_document`}
 
-\item{includes, md_extensions, pandoc_args, ext}{See `?rmarkdown::md_document`}
+\item{md_extensions, pandoc_args, ext}{See `?rmarkdown::md_document`}
 }
 \description{
 This format generates a standard markdown file.
