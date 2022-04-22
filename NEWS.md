@@ -1,3 +1,6 @@
+# hugostyle 1.0.3 _2022-04-22_
+  * test: render rmd against both system and rstudio pandoc versions
+
 # hugostyle 1.0.2 _2022-04-22_
   * fix: R CMD check documentation warning
   * fix: R CMD check missing dependencies warning
