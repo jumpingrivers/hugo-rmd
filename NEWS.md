@@ -1,5 +1,11 @@
-# hugostyle 1.0.2 _2022-04-22_
+# hugostyle 1.0.3 _2022-04-22_
   * test: render rmd against both system and rstudio pandoc versions
+
+# hugostyle 1.0.2 _2022-04-22_
+  * fix: R CMD check documentation warning
+  * fix: R CMD check missing dependencies warning
+  * build: Drop dependency on unexported {rmarkdown} functions
+    * defined in package with reference to version that defs were taken from
 
 # hugostyle 1.0.1 _2022-03-16_
   * Feat: Allow hugo snippets to pass through Rmd files
